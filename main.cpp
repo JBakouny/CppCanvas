@@ -9,8 +9,7 @@ class Figure {
 public:
     Figure(double hauteur) : hauteur(hauteur) {}
 
-    void afficher() const { 
-        cout << "Figure:";
+    void afficher() const {
         cout << "Hauteur:" << hauteur << endl;
         cout << "Volume:" << volume() << endl;
     }
@@ -35,8 +34,11 @@ public:
     
     void afficher() const {
         cout << "Rectangle:" << endl;
+        // Figure::afficher();
         cout << "longueur = " << longueur << endl;
         cout << "largeur = " << largeur << endl;
+        cout << "surface = " << surface() << endl;
+        cout << "perimetre = " << perimetre() << endl;
     }
 
 protected:
@@ -47,6 +49,8 @@ protected:
     double perimetre() const {
         return (longueur + largeur) * 2;
     }
+
+
     
 private:
     double longueur;
@@ -64,7 +68,10 @@ public:
     
     void afficher() const {
         cout << "Cercle:" << endl;
+        // Figure::afficher();
         cout << "rayon = " << rayon << endl;
+        cout << "surface = " << surface() << endl;
+        cout << "perimetre = " << perimetre() << endl;
     }
 protected:
     double surface() const {
@@ -79,11 +86,49 @@ private:
     double rayon;
 };
 
+void afficher(const Figure & f) {
+    f.afficher();
+}
+
 int main() {
 
     Cercle c(100,10);
-    c.afficher(); 
+    // c.afficher();
+    // c.Figure::afficher(); 
+    
+    // afficher(c);
+                        // Compilation      Execution
+                        // Statique         Dynamique
+    Figure   f1 = c;    // Figure           Figure
+    Figure & f2 = c;    // Figure           Cercle
+    Figure * f3 = &c;   // Figure*          Cercle*
+
+    f1.afficher();
+    f2.afficher();
+    f3->afficher();
+
+
+    
 
     return 0;
 
 }
+
+// int main () {
+    
+//     vector<Figure *> figures;
+    
+//     figures.push_back(new Rectangle(10, 7, 3));
+//     figures.push_back(new Cercle(100, 10));
+    
+//     for (size_t i = 0; i < figures.size(); ++i) {
+//         figures[i] -> afficher();
+//         cout << "surface = " << figures[i] -> surface() << endl;
+//         cout << "perimetre = " << figures[i] -> perimetre() << endl;
+//         cout << endl;
+        
+//         delete figures[i];
+//     }
+// }
+
+
