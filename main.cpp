@@ -103,6 +103,14 @@ void afficher(const Figure & f) {
 
 class Canvas {
 public:
+
+
+    Canvas  (const Canvas & canvas) {
+        for(auto f : canvas.figures) {
+            figures.push_back(f->copy());
+        }
+    }
+
     void add(const Figure & f) {
         figures.push_back(f.copy());
     }
@@ -168,7 +176,6 @@ private:
 
 // }
 
-
 void ajouterCercle (Canvas & canvas) {
     Cercle c(100,10);
     canvas.add(c);
@@ -184,3 +191,6 @@ int main() {
     canvas.afficher();
     return 0;
 }
+
+
+// 
