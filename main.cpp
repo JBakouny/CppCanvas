@@ -9,17 +9,22 @@ class Figure {
 public:
     Figure(double hauteur) : hauteur(hauteur) {}
 
-    virtual void afficher() const {
+    void afficher() const {
+        doAfficher();
         cout << "Hauteur:" << hauteur << endl;
         cout << "Volume:" << volume() << endl;
+        cout << "surface = " << surface() << endl;
+        cout << "perimetre = " << perimetre() << endl;
     }
     double volume() const { 
         return hauteur * surface();
     } 
 
-protected:
     virtual double surface() const = 0;
     virtual double perimetre() const = 0;
+
+protected:
+    virtual void doAfficher() const = 0;
 
 private:
     double hauteur;
@@ -32,16 +37,12 @@ public:
     {
     }
     
-    void afficher() const {
+    void doAfficher() const {
         cout << "Rectangle:" << endl;
-        Figure::afficher();
         cout << "longueur = " << longueur << endl;
         cout << "largeur = " << largeur << endl;
-        cout << "surface = " << surface() << endl;
-        cout << "perimetre = " << perimetre() << endl;
     }
 
-protected:
     double surface() const {
         return longueur * largeur;
     }
@@ -66,14 +67,11 @@ public:
     {
     }
     
-    void afficher() const {
+    void doAfficher() const {
         cout << "Cercle:" << endl;
-        Figure::afficher();
         cout << "rayon = " << rayon << endl;
-        cout << "surface = " << surface() << endl;
-        cout << "perimetre = " << perimetre() << endl;
     }
-protected:
+
     double surface() const {
         return pi * rayon * rayon;
     }
