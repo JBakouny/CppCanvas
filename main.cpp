@@ -9,7 +9,7 @@ class Figure {
 public:
     Figure(double hauteur) : hauteur(hauteur) {}
 
-    void afficher() const {
+    virtual void afficher() const {
         cout << "Hauteur:" << hauteur << endl;
         cout << "Volume:" << volume() << endl;
     }
