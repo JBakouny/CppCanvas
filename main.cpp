@@ -18,8 +18,8 @@ public:
     } 
 
 protected:
-    double surface() const { return -1;}
-    double perimetre() const { return -1;}
+    virtual double surface() const { return -1;}
+    virtual double perimetre() const { return -1;}
 
 private:
     double hauteur;
