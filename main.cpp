@@ -103,13 +103,19 @@ void afficher(const Figure & f) {
 
 class Canvas {
 public:
-    void add(const Figure * f) {
-        figures.push_back(f);
+    void add(const Figure & f) {
+        figures.push_back(f.copy());
     }
 
     void afficher() const {
         for(auto f : figures) {
             f->afficher();
+        }
+    }
+
+    ~Canvas() {
+        for(auto f : figures) {
+            delete f;
         }
     }
 private:
@@ -163,13 +169,17 @@ private:
 // }
 
 
+void ajouterCercle (Canvas & canvas) {
+    Cercle c(100,10);
+    canvas.add(c);
+}
+
 int main() {
 
     Canvas canvas;
-    Cercle c(100,10);
-    canvas.add(&c);
+    ajouterCercle(canvas);
     Rectangle r(10, 7, 3);
-    canvas.add(&r);
+    canvas.add(r);
 
     canvas.afficher();
     return 0;
