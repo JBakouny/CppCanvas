@@ -41,7 +41,7 @@ public:
     }
 
     
-    Figure * copy() const = 0 {
+    Figure * copy() const {
         return new Rectangle(*this);
     }
 
@@ -76,7 +76,7 @@ public:
     {
     }
 
-    Figure * copy() const = 0 {
+    Figure * copy() const {
         return new Cercle(*this);
     }
     
@@ -100,6 +100,22 @@ private:
 void afficher(const Figure & f) {
     f.afficher();
 }
+
+class Canvas {
+public:
+    void add(const Figure * f) {
+        figures.push_back(f);
+    }
+
+    void afficher() const {
+        for(auto f : figures) {
+            f->afficher();
+        }
+    }
+private:
+    vector<const Figure *> figures;
+
+};
 
 // int main() {
 
@@ -125,25 +141,36 @@ void afficher(const Figure & f) {
 
 // }
 
-int main () {
+// int main () {
     
-    vector<Figure *> figures;
+//     vector<Figure *> figures;
     
-    figures.push_back(new Rectangle(10, 7, 3));
-    figures.push_back(new Cercle(100, 10));
+//     figures.push_back(new Rectangle(10, 7, 3));
+//     figures.push_back(new Cercle(100, 10));
     
-    for (size_t i = 0; i < figures.size(); ++i) {
-        figures[i] -> afficher();
-        cout << endl;
+//     for (size_t i = 0; i < figures.size(); ++i) {
+//         figures[i] -> afficher();
+//         cout << endl;
         
-        delete figures[i];
-    }
+//         delete figures[i];
+//     }
 
-    vector<Figure *> deepCopy;
-    for (auto f : figures) {
-        deepCopy.push_back(f->copy());
-    }
-    
+//     vector<Figure *> deepCopy;
+//     for (auto f : figures) {
+//         deepCopy.push_back(f->copy());
+//     }
+
+// }
+
+
+int main() {
+
+    Canvas canvas;
+    Cercle c(100,10);
+    canvas.add(&c);
+    Rectangle r(10, 7, 3);
+    canvas.add(&r);
+
+    canvas.afficher();
+    return 0;
 }
-
-
