@@ -9,6 +9,9 @@ class Figure {
 public:
     Figure(double hauteur) : hauteur(hauteur) {}
 
+
+    virtual Figure * copy() const = 0;
+
     void afficher() const {
         doAfficher();
         cout << "Hauteur:" << hauteur << endl;
@@ -36,6 +39,12 @@ public:
     : Figure(hauteur), longueur(longueur), largeur(largeur)
     {
     }
+
+    
+    Figure * copy() const = 0 {
+        return new Rectangle(*this);
+    }
+
     
     void doAfficher() const {
         cout << "Rectangle:" << endl;
@@ -66,6 +75,10 @@ public:
     : Figure(hauteur), rayon(rayon)
     {
     }
+
+    Figure * copy() const = 0 {
+        return new Cercle(*this);
+    }
     
     void doAfficher() const {
         cout << "Cercle:" << endl;
@@ -88,43 +101,49 @@ void afficher(const Figure & f) {
     f.afficher();
 }
 
-int main() {
+// int main() {
 
-    Cercle c(100,10);
-//     // c.afficher();
-//     // c.Figure::afficher(); 
+//     Cercle c(100,10);
+// //     // c.afficher();
+// //     // c.Figure::afficher(); 
     
-//     // afficher(c);
-                        // Compilation      Execution
-                        // Statique         Dynamique
-    // Figure   f1 = c;    // Figure           Figure
-    Figure & f2 = c;    // Figure           Cercle
-    Figure * f3 = &c;   // Figure*          Cercle*
+// //     // afficher(c);
+//                         // Compilation      Execution
+//                         // Statique         Dynamique
+//     // Figure   f1 = c;    // Figure           Figure
+//     Figure & f2 = c;    // Figure           Cercle
+//     Figure * f3 = &c;   // Figure*          Cercle*
 
-    // f1.afficher();
-    f2.afficher();
-    f3->afficher();
+//     // f1.afficher();
+//     f2.afficher();
+//     f3->afficher();
 
 
     
 
-    return 0;
+//     return 0;
 
-}
-
-// int main () {
-    
-//     vector<Figure *> figures;
-    
-//     figures.push_back(new Rectangle(10, 7, 3));
-//     figures.push_back(new Cercle(100, 10));
-    
-//     for (size_t i = 0; i < figures.size(); ++i) {
-//         figures[i] -> afficher();
-//         cout << endl;
-        
-//         delete figures[i];
-//     }
 // }
+
+int main () {
+    
+    vector<Figure *> figures;
+    
+    figures.push_back(new Rectangle(10, 7, 3));
+    figures.push_back(new Cercle(100, 10));
+    
+    for (size_t i = 0; i < figures.size(); ++i) {
+        figures[i] -> afficher();
+        cout << endl;
+        
+        delete figures[i];
+    }
+
+    vector<Figure *> deepCopy;
+    for (auto f : figures) {
+        deepCopy.push_back(f->copy());
+    }
+    
+}
 
 
