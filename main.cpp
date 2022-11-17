@@ -34,7 +34,7 @@ public:
     
     void afficher() const {
         cout << "Rectangle:" << endl;
-        // Figure::afficher();
+        Figure::afficher();
         cout << "longueur = " << longueur << endl;
         cout << "largeur = " << largeur << endl;
         cout << "surface = " << surface() << endl;
@@ -68,7 +68,7 @@ public:
     
     void afficher() const {
         cout << "Cercle:" << endl;
-        // Figure::afficher();
+        Figure::afficher();
         cout << "rayon = " << rayon << endl;
         cout << "surface = " << surface() << endl;
         cout << "perimetre = " << perimetre() << endl;
