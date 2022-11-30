@@ -1,5 +1,9 @@
 #include <iostream>
 #include <vector>
+#include <string>
+#include <fstream>
+#include <utility>
+#include <sstream>
 using namespace std;
 
 
@@ -12,12 +16,14 @@ public:
 
     virtual Figure * copy() const = 0;
 
-    void afficher() const {
-        doAfficher();
-        cout << "Hauteur:" << hauteur << endl;
-        cout << "Volume:" << volume() << endl;
-        cout << "surface = " << surface() << endl;
-        cout << "perimetre = " << perimetre() << endl;
+    string toString() const {
+        stringstream ss;
+        ss << doToString();
+        ss << "Hauteur:" << hauteur << endl;
+        ss << "Volume:" << volume() << endl;
+        ss << "surface = " << surface() << endl;
+        ss << "perimetre = " << perimetre() << endl;
+        return ss.str();
     }
     double volume() const { 
         return hauteur * surface();
@@ -27,11 +33,16 @@ public:
     virtual double perimetre() const = 0;
 
 protected:
-    virtual void doAfficher() const = 0;
+    virtual string doToString() const = 0;
 
 private:
     double hauteur;
 };
+
+ostream& operator<<(ostream& out, const Figure & f) {
+    out << f.toString();
+    return out;
+}
 
 class Rectangle : public Figure {
 public:
@@ -46,10 +57,12 @@ public:
     }
 
     
-    void doAfficher() const {
-        cout << "Rectangle:" << endl;
-        cout << "longueur = " << longueur << endl;
-        cout << "largeur = " << largeur << endl;
+    string doToString() const override {
+        stringstream ss;
+        ss << "Rectangle:" << endl;
+        ss << "longueur = " << longueur << endl;
+        ss << "largeur = " << largeur << endl;
+        return ss.str();
     }
 
     double surface() const {
@@ -80,9 +93,11 @@ public:
         return new Cercle(*this);
     }
     
-    void doAfficher() const {
-        cout << "Cercle:" << endl;
-        cout << "rayon = " << rayon << endl;
+    string doToString() const override {
+        stringstream ss;
+        ss << "Cercle:" << endl;
+        ss << "rayon = " << rayon << endl;
+        return ss.str();
     }
 
     double surface() const {
@@ -97,28 +112,31 @@ private:
     double rayon;
 };
 
-void afficher(const Figure & f) {
-    f.afficher();
-}
-
 class Canvas {
 public:
 
-
+    Canvas() = default;
     Canvas  (const Canvas & canvas) {
         for(auto f : canvas.figures) {
             figures.push_back(f->copy());
         }
     }
 
+    Canvas& operator= (Canvas c) {
+        swap(*this, c);
+        return *this;
+    }
+
     void add(const Figure & f) {
         figures.push_back(f.copy());
     }
 
-    void afficher() const {
+    string toString() const {
+        stringstream ss;
         for(auto f : figures) {
-            f->afficher();
+            ss << *f << endl;
         }
+        return ss.str();
     }
 
     ~Canvas() {
@@ -129,52 +147,19 @@ public:
 private:
     vector<const Figure *> figures;
 
+    friend void swap(Canvas & c1, Canvas & c2);
+
 };
 
-// int main() {
+void swap(Canvas & c1, Canvas & c2) {
+    using std::swap;
+    swap(c1.figures, c2.figures);
+}
 
-//     Cercle c(100,10);
-// //     // c.afficher();
-// //     // c.Figure::afficher(); 
-    
-// //     // afficher(c);
-//                         // Compilation      Execution
-//                         // Statique         Dynamique
-//     // Figure   f1 = c;    // Figure           Figure
-//     Figure & f2 = c;    // Figure           Cercle
-//     Figure * f3 = &c;   // Figure*          Cercle*
-
-//     // f1.afficher();
-//     f2.afficher();
-//     f3->afficher();
-
-
-    
-
-//     return 0;
-
-// }
-
-// int main () {
-    
-//     vector<Figure *> figures;
-    
-//     figures.push_back(new Rectangle(10, 7, 3));
-//     figures.push_back(new Cercle(100, 10));
-    
-//     for (size_t i = 0; i < figures.size(); ++i) {
-//         figures[i] -> afficher();
-//         cout << endl;
-        
-//         delete figures[i];
-//     }
-
-//     vector<Figure *> deepCopy;
-//     for (auto f : figures) {
-//         deepCopy.push_back(f->copy());
-//     }
-
-// }
+ostream& operator<<(ostream& out, const Canvas & c) {
+    out << c.toString();
+    return out;
+}
 
 void ajouterCercle (Canvas & canvas) {
     Cercle c(100,10);
@@ -188,7 +173,24 @@ int main() {
     Rectangle r(10, 7, 3);
     canvas.add(r);
 
-    canvas.afficher();
+    Canvas canvasCopy;
+    canvasCopy = canvas;
+
+    Rectangle r2(100, 70, 30);
+    canvas.add(r2);
+
+    cout << "Canvas Copy:" << endl;
+    cout << "==============" << endl;
+    cout << canvasCopy << endl;
+
+    cout << "Original Canvas:" << endl;
+    cout << "==============" << endl;
+    cout << canvas << endl;
+
+    ofstream of("TestStdOut.txt");
+    of << canvas << endl;
+    of.close();
+
     return 0;
 }
 
